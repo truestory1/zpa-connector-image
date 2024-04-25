@@ -2,11 +2,11 @@ name: buildx
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: "0 21 * * 5"
+  pull_request:
   push:
     branches:
       - 'master'
+      - 'main'
 
 env:
   IMAGE_NAME: truestory1/zpa-connector-image
