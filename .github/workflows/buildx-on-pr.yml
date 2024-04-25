@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: zpa-connector
+  IMAGE_NAME: ghcr.io/truestory1/zpa-connector-image
 
 jobs:
   buildx-on-pr:
