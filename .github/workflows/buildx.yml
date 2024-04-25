@@ -63,10 +63,6 @@ jobs:
           context: .
           file: Containerfile
           tags: |
-            ${{ env.IMAGE_NAME }}:latest
-            ${{ env.IMAGE_NAME }}:${{ env.VER_FULL }}
-            ${{ env.IMAGE_NAME }}:${{ env.VER_MINOR }}
-            ${{ env.IMAGE_NAME }}:${{ env.VER_MAJOR }}
             ghcr.io/${{ env.IMAGE_NAME }}:latest
             ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VER_FULL }}
             ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VER_MINOR }}
