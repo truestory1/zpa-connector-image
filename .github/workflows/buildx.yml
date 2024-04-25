@@ -2,15 +2,13 @@ name: buildx
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: "0 21 * * 5"
   push:
     branches:
       - 'master'
 
+
 env:
-  IMAGE_NAME: ghcr.io/truestory1/flexget
-  ALPINE_VER: '3.19'
+  IMAGE_NAME: truestory1/zpa-connector-image
 
 jobs:
   buildx:
@@ -19,11 +17,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Compile requirements.txt
-        run: |
-          docker run --rm -i -v ${PWD}:/req alpine:${{ env.ALPINE_VER }} \
-            sh -c "apk add py3-pip build-base python3-dev libffi-dev && rm /usr/lib/python*/EXTERNALLY-MANAGED && pip install pip-tools && cd /req && pip-compile -U"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -35,23 +28,21 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockerfile
+          file: Containerfile
           tags: ${{ env.IMAGE_NAME }}:testing
-          platforms: linux/amd64,linux/arm64
-          build-args: |
-            ALPINE_VER=${{ env.ALPINE_VER }}
+          platforms: linux/amd64
 
       - name: Load Built Image and Get Variables
         id: vars
         run: |
           docker buildx build \
+            -f Containerfile \
             -t ${{ env.IMAGE_NAME }}:testing \
             --platform=linux/amd64 \
-            --build-arg ALPINE_VER=${{ env.ALPINE_VER }} \
             --load \
             .
           CID=$(docker run -d ${{ env.IMAGE_NAME }}:testing)
-          VER_FULL=$(docker exec $CID flexget -V | sed -n 1p)
+          VER_FULL=$(docker exec $CID rpm -q --queryformat '%{VERSION}' zpa-connector)
           echo "VER_FULL=$VER_FULL" >> $GITHUB_ENV
           docker rm -f $CID
           VER_MINOR=$(echo $VER_FULL | cut -d. -f-2)
@@ -70,30 +61,11 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockerfile
+          file: Containerfile
           tags: |
-            ${{ env.IMAGE_NAME }}:latest
-            ${{ env.IMAGE_NAME }}:${{ env.VER_FULL }}
-            ${{ env.IMAGE_NAME }}:${{ env.VER_MINOR }}
-            ${{ env.IMAGE_NAME }}:${{ env.VER_MAJOR }}
             ghcr.io/${{ env.IMAGE_NAME }}:latest
             ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VER_FULL }}
             ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VER_MINOR }}
             ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VER_MAJOR }}
-          platforms: linux/amd64,linux/arm64
-          build-args: |
-            ALPINE_VER=${{ env.ALPINE_VER }}
+          platforms: linux/amd64
           push: true
-
-      - name: Commit requirements.txt
-        uses: EndBug/add-and-commit@v9
-        with:
-          message: |
-            Update requirements.txt
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: requirements.txt
-          path: requirements.txt
