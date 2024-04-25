@@ -3,9 +3,12 @@ FROM registry.access.redhat.com/ubi8/ubi-init@sha256:d35aff7118921a3a2c2e78507fc
 # Add repositories
 COPY zscaler.repo /etc/yum.repos.d/
 
+# Add startup script
+COPY start.sh /start.sh
+
 # Install packages and enable services
 RUN yum -y install zpa-connector rsyslog && \
     yum clean all && \
-    systemctl enable zpa-connector rsyslog
+    systemctl enable rsyslog
 
-CMD [ "/sbin/init" ]
+CMD [ "/start.sh" ]
