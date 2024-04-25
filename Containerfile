@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi-init@sha256:d35aff7118921a3a2c2e78507fc7329b499b8fb09d290dc60a44eea6cdeb9b5c
+FROM registry.access.redhat.com/ubi8/ubi
 
 # Add repositories
 COPY zscaler.repo /etc/yum.repos.d/
@@ -7,9 +7,8 @@ COPY zscaler.repo /etc/yum.repos.d/
 COPY start.sh /start.sh
 
 # Install packages and enable services
-RUN yum -y install zpa-connector rsyslog && \
+RUN yum -y install zpa-connector && \
     yum clean all && \
-    systemctl enable rsyslog && \
     chmod +x /start.sh
 
 CMD [ "/start.sh" ]
