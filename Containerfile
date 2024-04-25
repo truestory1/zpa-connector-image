@@ -9,6 +9,7 @@ COPY start.sh /start.sh
 # Install packages and enable services
 RUN yum -y install zpa-connector rsyslog && \
     yum clean all && \
-    systemctl enable rsyslog
+    systemctl enable rsyslog && \
+    chmod +x /start.sh
 
 CMD [ "/start.sh" ]
