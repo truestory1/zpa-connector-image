@@ -7,7 +7,7 @@ COPY zscaler.repo /etc/yum.repos.d/
 COPY start.sh /start.sh
 
 # Install packages and enable services
-RUN yum -y install zpa-connector && \
+RUN yum -y install zpa-connector procps-ng && \
     yum clean all && \
     chmod +x /start.sh
 
