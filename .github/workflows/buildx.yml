@@ -2,20 +2,16 @@ name: buildx
 
 on:
   workflow_dispatch:
+  pull_request:
   schedule:
     - cron: '22 4 * * *'
   push:
     branches:
       - 'master'
 
-
-env:
-  IMAGE_NAME: truestory1/zpa-connector-image
-
 jobs:
   buildx:
     runs-on: ubuntu-22.04
-    if: github.event_name != 'pull_request'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,6 +22,9 @@ jobs:
       - name: Set up Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Set up variable repository name
+        run: echo "IMAGE_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
+
       - name: Initial Buildx
         uses: docker/build-push-action@v5
         with:
@@ -33,6 +32,8 @@ jobs:
           file: Containerfile
           tags: ${{ env.IMAGE_NAME }}:testing
           platforms: linux/amd64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Load Built Image and Get Variables
         id: vars
@@ -41,6 +42,8 @@ jobs:
             -f Containerfile \
             -t ${{ env.IMAGE_NAME }}:testing \
             --platform=linux/amd64 \
+            --cache-to type=gha,mode=max \
+            --cache-from type=gha \
             --load \
             .
           CID=$(docker run -d ${{ env.IMAGE_NAME }}:testing)
@@ -71,3 +74,5 @@ jobs:
             ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VER_MAJOR }}
           platforms: linux/amd64
           push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
