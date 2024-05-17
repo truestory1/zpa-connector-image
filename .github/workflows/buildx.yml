@@ -2,6 +2,8 @@ name: buildx
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '22 4 * * *'
   push:
     branches:
       - 'master'
