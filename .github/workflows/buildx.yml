@@ -32,8 +32,6 @@ jobs:
           file: Containerfile
           tags: ${{ env.IMAGE_NAME }}:testing
           platforms: linux/amd64
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           provenance: false
 
       - name: Load Built Image and Get Variables
@@ -43,8 +41,6 @@ jobs:
             -f Containerfile \
             -t ${{ env.IMAGE_NAME }}:testing \
             --platform=linux/amd64 \
-            --cache-to type=gha,mode=max \
-            --cache-from type=gha \
             --load \
             .
           CID=$(docker run -d ${{ env.IMAGE_NAME }}:testing)
@@ -75,6 +71,4 @@ jobs:
             ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VER_MAJOR }}
           platforms: linux/amd64
           push: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           provenance: false
