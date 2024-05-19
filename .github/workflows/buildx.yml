@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   # pull_request:
   schedule:
-    - cron: '22 4 * * *'
+    - cron: '22 4 * * 0'
   push:
     branches:
       - 'master'
