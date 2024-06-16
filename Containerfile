@@ -13,6 +13,6 @@ RUN yum -y install --disableplugin=subscription-manager \
     yum clean all && \
     chmod +x /start.sh
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 CMD ps aux | grep zpa-connector-child | grep -v grep
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 CMD [ ps aux | grep zpa-connector-child | grep -v grep ]
 
 CMD [ "/start.sh" ]
