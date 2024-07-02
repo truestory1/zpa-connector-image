@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal@sha256:5f1cd3422d5d46aea35dac80825dbcbd58213eef49c317f42a394345fb4e8ff1
+FROM registry.access.redhat.com/ubi9/ubi-minimal
 
 # Add repositories
 COPY zscaler.repo /etc/yum.repos.d/
