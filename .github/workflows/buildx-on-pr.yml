@@ -42,3 +42,4 @@ jobs:
           platforms: ${{ env.PLATFORMS }}
           push: true
           provenance: false
+          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=ZPA Connector
