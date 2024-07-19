@@ -9,6 +9,9 @@ on:
     branches:
       - 'master'
 
+env:
+  PLATFORMS: linux/amd64,linux/arm64
+
 jobs:
   buildx:
     runs-on: ubuntu-22.04
@@ -31,7 +34,7 @@ jobs:
           context: .
           file: Containerfile
           tags: ${{ env.IMAGE_NAME }}:testing
-          platforms: linux/amd64
+          platforms: ${{ env.PLATFORMS }}
           provenance: false
 
       - name: Load Built Image and Get Variables
@@ -69,6 +72,6 @@ jobs:
             ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VER_FULL }}
             ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VER_MINOR }}
             ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VER_MAJOR }}
-          platforms: linux/amd64
+          platforms: ${{ env.PLATFORMS }}
           push: true
           provenance: false

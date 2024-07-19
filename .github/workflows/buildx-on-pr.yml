@@ -4,10 +4,12 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  PLATFORMS: linux/amd64,linux/arm64
+
 jobs:
   buildx-on-pr:
     runs-on: ubuntu-22.04
-    if: github.event_name == 'pull_request'
     steps:
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
@@ -37,6 +39,7 @@ jobs:
           tags: |
             ghcr.io/${{ env.IMAGE_NAME }}:testing
             ghcr.io/${{ env.IMAGE_NAME }}:testing-${{ github.event.pull_request.number }}
-          platforms: linux/amd64
+          platforms: ${{ env.PLATFORMS }}
           push: true
           provenance: false
+          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=ZPA Connector
