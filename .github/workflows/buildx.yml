@@ -40,7 +40,7 @@ jobs:
         with:
           context: .
           file: Containerfile
-          tags: ${{ env.IMAGE_NAME }}:testing
+          tags: ghcr.io/${{ env.IMAGE_NAME }}:testing
           platforms: ${{ env.PLATFORMS }}
           provenance: false
           cache-from: type=gha
