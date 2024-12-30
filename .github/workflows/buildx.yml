@@ -57,7 +57,7 @@ jobs:
           #   --cache-from type=gha \
           #   --load \
           #   .
-          CID=$(docker run -d ${{ env.IMAGE_NAME }}:testing)
+          CID=$(docker run -d ghcr.io/${{ env.IMAGE_NAME }}:testing)
           VER_FULL=$(docker exec $CID rpm -q --queryformat '%{VERSION}' zpa-connector)
           echo "VER_FULL=$VER_FULL" >> $GITHUB_ENV
           docker rm -f $CID
