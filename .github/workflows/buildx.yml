@@ -44,6 +44,8 @@ jobs:
             -f Containerfile \
             -t ${{ env.IMAGE_NAME }}:testing \
             --platform=linux/amd64 \
+            --cache-to type=registry,ref=user/app:buildcache,mode=max
+            --cache-form type=registry,ref=user/app:buildcache
             --load \
             .
           CID=$(docker run -d ${{ env.IMAGE_NAME }}:testing)
@@ -73,5 +75,7 @@ jobs:
             ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VER_MINOR }}
             ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VER_MAJOR }}
           platforms: ${{ env.PLATFORMS }}
+          cache-from: type=registry,ref=user/app:buildcache
+          cache-to: type=registry,ref=user/app:buildcache,mode=max
           push: true
           provenance: false
