@@ -36,6 +36,8 @@ jobs:
           tags: ${{ env.IMAGE_NAME }}:testing
           platforms: ${{ env.PLATFORMS }}
           provenance: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Load Built Image and Get Variables
         id: vars
@@ -45,7 +47,7 @@ jobs:
             -t ${{ env.IMAGE_NAME }}:testing \
             --platform=linux/amd64 \
             --cache-to type=gha,mode=max \
-            --cache-form type=gha \
+            --cache-from type=gha \
             --load \
             .
           CID=$(docker run -d ${{ env.IMAGE_NAME }}:testing)
