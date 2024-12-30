@@ -66,18 +66,18 @@ jobs:
           VER_MAJOR=$(echo $VER_FULL | cut -d. -f-1)
           echo "VER_MAJOR=$VER_MAJOR" >> $GITHUB_ENV
 
-      # - name: Buildx and Push
-      #   uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355 # v6
-      #   with:
-      #     context: .
-      #     file: Containerfile
-      #     tags: |
-      #       ghcr.io/${{ env.IMAGE_NAME }}:latest
-      #       ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VER_FULL }}
-      #       ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VER_MINOR }}
-      #       ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VER_MAJOR }}
-      #     platforms: ${{ env.PLATFORMS }}
-      #     cache-from: type=gha
-      #     cache-to: type=gha,mode=max
-      #     push: true
-      #     provenance: false
+      - name: Buildx and Push
+        uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355 # v6
+        with:
+          context: .
+          file: Containerfile
+          tags: |
+            ghcr.io/${{ env.IMAGE_NAME }}:latest
+            ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VER_FULL }}
+            ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VER_MINOR }}
+            ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VER_MAJOR }}
+          platforms: ${{ env.PLATFORMS }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          push: true
+          provenance: false
