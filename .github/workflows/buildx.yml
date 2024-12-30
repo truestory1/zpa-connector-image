@@ -45,6 +45,7 @@ jobs:
           provenance: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          push: true
 
       - name: Load Built Image and Get Variables
         id: vars
