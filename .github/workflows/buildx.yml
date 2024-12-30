@@ -2,7 +2,7 @@ name: buildx
 
 on:
   workflow_dispatch:
-  # pull_request:
+  pull_request:
   schedule:
     - cron: '22 4 * * 0'
   push:
@@ -40,27 +40,28 @@ jobs:
         with:
           context: .
           file: Containerfile
-          tags: ${{ env.IMAGE_NAME }}:testing
+          tags: ghcr.io/${{ env.IMAGE_NAME }}:testing
           platforms: ${{ env.PLATFORMS }}
           provenance: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          push: true
 
       - name: Load Built Image and Get Variables
         id: vars
         run: |
-          docker buildx build \
-            -f Containerfile \
-            -t ${{ env.IMAGE_NAME }}:testing \
-            --platform=linux/amd64 \
-            --cache-to type=gha,mode=max \
-            --cache-from type=gha \
-            --load \
-            .
-          CID=$(docker run -d ${{ env.IMAGE_NAME }}:testing)
-          VER_FULL=$(docker exec $CID rpm -q --queryformat '%{VERSION}' zpa-connector)
+          # docker buildx build \
+          #   -f Containerfile \
+          #   -t ${{ env.IMAGE_NAME }}:testing \
+          #   --platform=linux/amd64 \
+          #   --cache-to type=gha,mode=max \
+          #   --cache-from type=gha \
+          #   --load \
+          #   .
+          # CID=$(docker run -d ghcr.io/${{ env.IMAGE_NAME }}:testing)
+          VER_FULL=$(docker run --rm ghcr.io/${{ env.IMAGE_NAME }}:testing rpm -q --queryformat '%{VERSION}' zpa-connector)
+          # docker run --rm ghcr.io/${{ env.IMAGE_NAME }}:testing rpm -q --queryformat '%{VERSION}' zpa-connector
           echo "VER_FULL=$VER_FULL" >> $GITHUB_ENV
-          docker rm -f $CID
           VER_MINOR=$(echo $VER_FULL | cut -d. -f-2)
           echo "VER_MINOR=$VER_MINOR" >> $GITHUB_ENV
           VER_MAJOR=$(echo $VER_FULL | cut -d. -f-1)

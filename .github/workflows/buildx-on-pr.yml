@@ -1,7 +1,7 @@
 name: buildx-on-pr
 
 on:
-  pull_request:
+  # pull_request:
   workflow_dispatch:
 
 env:
