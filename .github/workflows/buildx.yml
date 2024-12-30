@@ -57,14 +57,15 @@ jobs:
           #   --cache-from type=gha \
           #   --load \
           #   .
-          CID=$(docker run -d ghcr.io/${{ env.IMAGE_NAME }}:testing)
-          VER_FULL=$(docker exec $CID rpm -q --queryformat '%{VERSION}' zpa-connector)
-          echo "VER_FULL=$VER_FULL" >> $GITHUB_ENV
-          docker rm -f $CID
-          VER_MINOR=$(echo $VER_FULL | cut -d. -f-2)
-          echo "VER_MINOR=$VER_MINOR" >> $GITHUB_ENV
-          VER_MAJOR=$(echo $VER_FULL | cut -d. -f-1)
-          echo "VER_MAJOR=$VER_MAJOR" >> $GITHUB_ENV
+          # CID=$(docker run -d ghcr.io/${{ env.IMAGE_NAME }}:testing)
+          # VER_FULL=$(docker exec $CID rpm -q --queryformat '%{VERSION}' zpa-connector)
+          docker run --rm ghcr.io/${{ env.IMAGE_NAME }}:testing rpm -q --queryformat '%{VERSION}' zpa-connector
+          # echo "VER_FULL=$VER_FULL" >> $GITHUB_ENV
+          # # docker rm -f $CID
+          # VER_MINOR=$(echo $VER_FULL | cut -d. -f-2)
+          # echo "VER_MINOR=$VER_MINOR" >> $GITHUB_ENV
+          # VER_MAJOR=$(echo $VER_FULL | cut -d. -f-1)
+          # echo "VER_MAJOR=$VER_MAJOR" >> $GITHUB_ENV
 
       # - name: Buildx and Push
       #   uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355 # v6
