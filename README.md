@@ -14,11 +14,11 @@ This repository contains a Docker container image for Zscaler Private Access (ZP
 
 ## Introduction
 
-The ZPA Connector facilitates secure communication between your applications and the Zscaler Private Access (ZPA) cloud. This image is built on UBI 8, ensuring compatibility and security.
+The ZPA Connector facilitates secure communication between your applications and the Zscaler Private Access (ZPA) cloud. This image is built on UBI 9, ensuring compatibility and security.
 
 ## Features
 
-- Based on UBI 8
+- Based on UBI 9
 - Automated deployment and configuration
 - Secure and scalable
 
